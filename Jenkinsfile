@@ -31,6 +31,18 @@ pipeline {
                 sh "echo 'SonarQube analysis complete'"
             }
         }
+        stage('Quality Gate Check') {
+            steps {
+                script {
+                    def qualityGateStatus = sh(script: 'curl -s -u sqp_99fea77fcb35ba7cf4f7c418e2945c37852620d0: -X GET "http://54.67.125.210:9000/api/qualitygates/project_status?projectKey=sonarqubbe"', returnStdout: true).trim()
+                    echo "Quality Gate Status: $qualityGateStatus"
+                    if (qualityGateStatus.contains('ERROR') || qualityGateStatus.contains('WARN')) {
+                        currentBuild.result = 'FAILURE'
+                        error("Quality Gate not met")
+                    }
+                }
+            }
+        }
         stage('Deploy') {
             steps {
                 sh "echo 'Performing deployment'"
