@@ -13,12 +13,14 @@ pipeline {
         }
         stage('Snyk Scan') {
             steps {
-                script {
-                    def snykOutput = sh(script: 'snyk test', returnStdout: true)
-                    echo snykOutput
-                    if (snykOutput.contains('Known')) {
-                        currentBuild.result = 'FAILURE'
-                        error("Snyk found vulnerabilities")
+                withCredentials([string(credentialsId: 'tokensnyk', variable: 'SNYK_TOKEN')]) {
+                    script {
+                        def snykOutput = sh(script: "snyk test --all-projects --all-projects", returnStdout: true)
+                        echo snykOutput
+                        if (snykOutput.contains('Known')) {
+                            currentBuild.result = 'FAILURE'
+                            error("Snyk found vulnerabilities")
+                        }
                     }
                 }
             }
