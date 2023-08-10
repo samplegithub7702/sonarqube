@@ -16,23 +16,15 @@ pipeline {
                 sh "mvn test"
             }
         }
-        stage('Unit Test') {
+        stage('Code Coverage') {
             steps {
-                sh "echo 'Performing unit tests'"
-                // Add your unit test command(s) here
-                sh "echo 'Unit tests complete'"
-            }
-        }
-        stage('Delivery') {
-            steps {
-                sh "echo 'Performing delivery'"
-                sh "echo 'Delivery complete'"
+                sh "mvn jacoco:prepare-agent test jacoco:report"
             }
         }
         stage('SonarQube analysis') {
             steps {
                 sh "echo 'Running SonarQube analysis'"
-                sh "mvn clean verify sonar:sonar " +
+                sh "mvn sonar:sonar " +
                    "-Dsonar.projectKey=sonarqubbe " +
                    "-Dsonar.host.url=http://54.67.125.210:9000 " +
                    "-Dsonar.login=sqp_99fea77fcb35ba7cf4f7c418e2945c37852620d0"
