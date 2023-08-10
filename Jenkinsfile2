@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Snyk Scan') {
             steps {
-                withCredentials([string(credentialsId: 'tokensnyk', variable: 'SNYK_TOKEN')]) {
+                withCredentials([string(credentialsId: 'token-snyk', variable: 'SNYK_TOKEN')]) {
                     script {
                         def snykOutput = sh(script: "snyk test --all-projects --all-projects", returnStdout: true)
                         echo snykOutput
@@ -27,4 +27,3 @@ pipeline {
         }
     }
 }
-
