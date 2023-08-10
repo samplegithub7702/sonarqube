@@ -13,7 +13,7 @@ pipeline {
         }
         stage('Snyk Scan') {
             steps {
-                withCredentials([string(credentialsId: 'snyk-token', variable: 'SNYK_TOKEN')]) {
+                withCredentials([string(credentialsId: 'SNYK_API_TOKEN', variable: 'SNYK_TOKEN')]) {
                     script {
                         def snykOutput = sh(script: "snyk test --all-projects --all-projects", returnStdout: true)
                         echo snykOutput
@@ -25,5 +25,16 @@ pipeline {
                 }
             }
         }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    sh "mvn clean verify sonar:sonar " +
+                       "-Dsonar.projectKey=sonarqubbe " +
+                       "-Dsonar.host.url=http://54.67.125.210:9000 " +
+                       "-Dsonar.login=sqp_99fea77fcb35ba7cf4f7c418e2945c37852620d0"
+                }
+            }
+        }
     }
 }
+
