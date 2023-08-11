@@ -25,9 +25,9 @@ pipeline {
             steps {
                 sh "echo 'Running SonarQube analysis'"
                 sh "mvn sonar:sonar " +
-                   "-Dsonar.projectKey=sonarqubbe " +
-                   "-Dsonar.host.url=http://54.67.125.210:9000 " +
-                   "-Dsonar.login=sqp_99fea77fcb35ba7cf4f7c418e2945c37852620d0"
+                   "-Dsonar.projectKey=sonarqube " +
+                   "-Dsonar.host.url=http://52.8.96.200:9000/ " +
+                   "-Dsonar.login=sqp_cb3ce7c5ba4be063b9b8adf52c2996e364a62071"
                 sh "echo 'SonarQube analysis complete'"
             }
         }
